@@ -7,42 +7,29 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
  
 void Solve() 
 {
-    ll n,a,b;
-    cin>>n>>a>>b;
-    n++;
-    vector<ll>v(n);
-    vector<ll>av(n),bv(n);
-     v[0]=0;
-    for(ll i=1;i<n;i++)cin>>v[i];
-
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            av[i]=0;
-        }else{
-            av[i]=(n-1-i)*b*(v[i+1]-v[i])+av[i+1];
-        }
+    ll n,m;
+    cin>>n>>m;
+    vector<ll>a(n);
+    set<ll>b;
+    for(ll i=0;i<n;i++)cin>>a[i];
+    for(ll i=0;i<m;i++){
+    ll temp;
+    cin>>temp;
+    b.insert(temp);
     }
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            bv[i]=0;
-        }else{
-            bv[i]=(b+a)*(v[i+1]-v[i])+bv[i+1];
-        }
+   // sort(b.begin(),b.end());
+    a[0]=min(a[0],*b.begin()-a[0]);
+    for(ll i=1;i<n;i++){
+    if(b.lower_bound(a[i-1]+a[i])!=b.end())if(a[i]>=a[i-1]){
+    	a[i]=min((*b.lower_bound(a[i-1]+a[i]))-a[i],a[i]);
+    }else a[i]=(*b.lower_bound(a[i-1]+a[i]))-a[i];
+    if(a[i]<a[i-1]){
+    cout<<"NO"<<endl;
+    return;
     }
-    ll cost=INF;
-    for(ll i=-1;i<n;i++){
-     if(i==-1){
-        cost=min(cost,av[0]);
-     }
-     if(i==n-1){
-        continue;
-     }
-     else{
-        cost=min(cost,av[i+1]+abs(bv[i+1]-bv[0]));
-     }
     }
-    cout<<cost<<endl;
-
+    cout<<"YES"<<endl;
+    return;
 }
  
 int32_t main() 

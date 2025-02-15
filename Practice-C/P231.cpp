@@ -4,45 +4,33 @@ using namespace std;
 #define INF (ll)1e18
  
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
- 
+ set<ll>st;
 void Solve() 
 {
-    ll n,a,b;
-    cin>>n>>a>>b;
-    n++;
-    vector<ll>v(n);
-    vector<ll>av(n),bv(n);
-     v[0]=0;
-    for(ll i=1;i<n;i++)cin>>v[i];
+    ll n;
+    cin>>n;
+    vector<ll>v(n+1,0);
+    vector<vector<ll>>neigh(n+1);
+    vector<ll>mp(n+1,0);
+    for(ll i=1;i<=n;i++)cin>>v[i];
+    for(ll i=0;i<n-1;i++){
+    ll temp1,temp2;
+    cin>>temp1>>temp2;
+    neigh[temp1].push_back(temp2);
+    neigh[temp2].push_back(temp1);
+    }
 
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            av[i]=0;
-        }else{
-            av[i]=(n-1-i)*b*(v[i+1]-v[i])+av[i+1];
-        }
+    for(ll i=1;i<=n;i++){
+    	st.clear();
+    for(auto it:neigh[i]){
+    if(v[i]==v[it])mp[v[i]]=1;
+    if(st.find(v[it])!=st.end())mp[v[it]]=1;
+    else st.insert(v[it]);
     }
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            bv[i]=0;
-        }else{
-            bv[i]=(b+a)*(v[i+1]-v[i])+bv[i+1];
-        }
+    
     }
-    ll cost=INF;
-    for(ll i=-1;i<n;i++){
-     if(i==-1){
-        cost=min(cost,av[0]);
-     }
-     if(i==n-1){
-        continue;
-     }
-     else{
-        cost=min(cost,av[i+1]+abs(bv[i+1]-bv[0]));
-     }
-    }
-    cout<<cost<<endl;
-
+    for(ll i=1;i<=n;i++)cout<<mp[i];
+    cout<<endl;
 }
  
 int32_t main() 

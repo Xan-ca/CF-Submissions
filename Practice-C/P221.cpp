@@ -7,41 +7,27 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
  
 void Solve() 
 {
-    ll n,a,b;
-    cin>>n>>a>>b;
-    n++;
-    vector<ll>v(n);
-    vector<ll>av(n),bv(n);
-     v[0]=0;
-    for(ll i=1;i<n;i++)cin>>v[i];
-
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            av[i]=0;
-        }else{
-            av[i]=(n-1-i)*b*(v[i+1]-v[i])+av[i+1];
+    ll n;
+    cin>>n;
+    vector<pair<ll,ll>>res;
+    for(ll i=2;i<=n;i++){
+    	cout<<"?"<<i<<" "<<1<<endl;
+    	cout<<flush;
+    	ll a,neighbour;
+    	cin>>a;
+        while(a!=i){
+            break;
+        	cout<<"?"<<i<<" "<<a<<endl;
+        	cout<<flush;
+        	cin>>a;
+        	if(a==i)break;
+        	neighbour=a;
         }
+        res.push_back({i,a});
     }
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            bv[i]=0;
-        }else{
-            bv[i]=(b+a)*(v[i+1]-v[i])+bv[i+1];
-        }
-    }
-    ll cost=INF;
-    for(ll i=-1;i<n;i++){
-     if(i==-1){
-        cost=min(cost,av[0]);
-     }
-     if(i==n-1){
-        continue;
-     }
-     else{
-        cost=min(cost,av[i+1]+abs(bv[i+1]-bv[0]));
-     }
-    }
-    cout<<cost<<endl;
+    cout<<"?"<<" ";
+    for(auto it:res)cout<<it.first<<" "<<it.second<<" ";
+    cout<<endl;
 
 }
  

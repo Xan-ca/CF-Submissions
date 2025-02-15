@@ -4,44 +4,45 @@ using namespace std;
 #define INF (ll)1e18
  
 mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
- 
+ void dfs(ll n,ll i,vector<vector<ll>>&adj,vector<ll>&vis){
+    vis[i]=n;
+    for(auto it:adj[i]){
+    	if(vis[it]==0){
+    		dfs(n,it,adj,vis);
+    	}
+    }
+    return ;
+
+ }
 void Solve() 
 {
-    ll n,a,b;
-    cin>>n>>a>>b;
-    n++;
-    vector<ll>v(n);
-    vector<ll>av(n),bv(n);
-     v[0]=0;
-    for(ll i=1;i<n;i++)cin>>v[i];
+    ll n,dest;
+    cin>>n>>dest;
+     vector<ll>a(n+1,0);
+     vector<vector<ll>>adj(n+1);
+     vector<ll>mn(n+1,INF),vis(n+1,0);
+     mn[0]=0;
+     for(ll i=1;i<=n;i++)cin>>a[i];
+     
+     for(ll i=1;i<=dest;i++){
+     	ll temp1,temp2;
+     	cin>>temp1>>temp2;
+     	adj[temp1].push_back(temp2);
+     	adj[temp2].push_back(temp1);
+     }
+    
+     for(ll i=1;i<=n;i++){
+     	if(vis[i]==0){
+     		dfs(i,i,adj,vis);
+     	}else mn[i]=0;
+     }
+     for(ll i=1;i<=n;i++){
+     	mn[vis[i]]=min(a[i],mn[vis[i]]);
+     }
 
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            av[i]=0;
-        }else{
-            av[i]=(n-1-i)*b*(v[i+1]-v[i])+av[i+1];
-        }
-    }
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            bv[i]=0;
-        }else{
-            bv[i]=(b+a)*(v[i+1]-v[i])+bv[i+1];
-        }
-    }
-    ll cost=INF;
-    for(ll i=-1;i<n;i++){
-     if(i==-1){
-        cost=min(cost,av[0]);
-     }
-     if(i==n-1){
-        continue;
-     }
-     else{
-        cost=min(cost,av[i+1]+abs(bv[i+1]-bv[0]));
-     }
-    }
-    cout<<cost<<endl;
+     cout<<accumulate(mn.begin(),mn.end(),0ll)<<endl;
+     return;
+
 
 }
  
@@ -54,7 +55,7 @@ int32_t main()
     // freopen("in",  "r", stdin);
     // freopen("out", "w", stdout);
     
-    cin >> t;
+    //cin >> t;
     for(ll i = 1; i <= t; i++) 
     {
         //cout << "Case #" << i << ": ";

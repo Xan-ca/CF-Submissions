@@ -7,42 +7,47 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
  
 void Solve() 
 {
-    ll n,a,b;
-    cin>>n>>a>>b;
-    n++;
-    vector<ll>v(n);
-    vector<ll>av(n),bv(n);
-     v[0]=0;
-    for(ll i=1;i<n;i++)cin>>v[i];
+    ll n,k;
+    cin>>n>>k;
+    if(n==4 && k==n-1){
+    	cout<<-1<<endl;
+    	return;
+    }
+    if(k==0){
+    for(ll i=0;i<n/2;i++){
+    	cout<<i<<" "<<n-1-i<<endl;
+    }
+    return;
+    }	
+    
+    else if(k!=n-1){
+    for(ll i=0;i<n/2;i++){
+    	if(i==k || i==n-1){
+    		continue;
+    	}
+    	if(i==n-1-k || i==0){
+    		continue;
+    	}
+    	cout<<i<<" "<<n-1-i<<endl;
+    }
+    cout<<k<<" "<<n-1<<endl;
+    cout<<n-1-k<<" "<<0<<endl;
+    return;
 
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            av[i]=0;
-        }else{
-            av[i]=(n-1-i)*b*(v[i+1]-v[i])+av[i+1];
-        }
+}
+    else if(k==n-1){
+    	for(ll i=0;i<n/2;i++){
+    	if(i==1 || i==3 || i==0){
+    		continue;
+    	}
+    	cout<<i<<" "<<n-1-i<<endl;
     }
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            bv[i]=0;
-        }else{
-            bv[i]=(b+a)*(v[i+1]-v[i])+bv[i+1];
-        }
-    }
-    ll cost=INF;
-    for(ll i=-1;i<n;i++){
-     if(i==-1){
-        cost=min(cost,av[0]);
-     }
-     if(i==n-1){
-        continue;
-     }
-     else{
-        cost=min(cost,av[i+1]+abs(bv[i+1]-bv[0]));
-     }
-    }
-    cout<<cost<<endl;
+    cout<<0<<" "<<n-1-3<<endl;
+    cout<<1<<" "<<3<<endl;
+    cout<<n-1<<" "<<n-2<<endl;
+    return;
 
+    }
 }
  
 int32_t main() 
@@ -57,7 +62,7 @@ int32_t main()
     cin >> t;
     for(ll i = 1; i <= t; i++) 
     {
-        //cout << "Case #" << i << ": ";
+        //cout << "Case #" << i << ": "<<endl;
         Solve();
     }
     auto end = std::chrono::high_resolution_clock::now();

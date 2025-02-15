@@ -7,43 +7,34 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
  
 void Solve() 
 {
-    ll n,a,b;
-    cin>>n>>a>>b;
-    n++;
-    vector<ll>v(n);
-    vector<ll>av(n),bv(n);
-     v[0]=0;
-    for(ll i=1;i<n;i++)cin>>v[i];
-
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            av[i]=0;
-        }else{
-            av[i]=(n-1-i)*b*(v[i+1]-v[i])+av[i+1];
-        }
+    ll n,m;
+    cin>>n>>m;
+    vector<vector<ll>>grid(n,vector<ll>(m));
+    vector<ll>sums(n,0);
+    vector<ll>ressum(n,0);
+    for(ll i=0;i<n;i++){
+    for(ll j=0;j<m;j++){
+    	ll temp;
+        cin>>temp;
+        if(j>0)grid[i][j]=temp+grid[i][j-1];
+        else grid[i][j]=temp;
+        if(j==m-1)sums[i]+=grid[i][j];
+        ressum[i]+=grid[i][j];
     }
-    for(ll i=n-1;i>=0;i--){
-        if(i==n-1){
-            bv[i]=0;
-        }else{
-            bv[i]=(b+a)*(v[i+1]-v[i])+bv[i+1];
-        }
+}
+    // for(auto it:sums)cout<<it<<" ";
+    // 	cout<<endl;
+    sort(sums.rbegin(),sums.rend());
+    ll res=0;
+    for(ll i=n-1,j=0;i>=0;i--,j++){
+    	res+=i*m*sums[j];
+    	res+=ressum[j];
     }
-    ll cost=INF;
-    for(ll i=-1;i<n;i++){
-     if(i==-1){
-        cost=min(cost,av[0]);
-     }
-     if(i==n-1){
-        continue;
-     }
-     else{
-        cost=min(cost,av[i+1]+abs(bv[i+1]-bv[0]));
-     }
-    }
-    cout<<cost<<endl;
+    cout<<res<<endl;
 
 }
+
+
  
 int32_t main() 
 {
