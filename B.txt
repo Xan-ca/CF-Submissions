@@ -1,0 +1,145 @@
+void solve(){
+        take();
+	big maxright = x , maxleft = x;
+	big curr = x;
+	bool hit_again = false;
+	int time_to_hit = -1;
+	for(int _time = 1; auto c : s){
+		if(c == 'L'){
+			curr--;
+			maxleft = std::min(maxleft,curr);
+			if(curr == x)
+				hit_again = true;
+			if(curr == 0){
+				time_to_hit = _time;
+				debug("HIT HERE");
+				break;
+			}
+		}else{
+			curr++;
+			maxright = std::max(maxright,curr);
+			if(curr == x){
+				hit_again = true;
+			}
+			if(curr == 0){
+				time_to_hit = _time;
+				debug("HIT HERE");
+				break;
+			}
+		}
+		_time++;
+	}
+	debug(time_to_hit,curr,maxleft,maxright,hit_again);
+	auto sim = [&](int curr){
+		for(int i = 0; i < n; i ++){
+			if(s[i] == 'L'){
+				curr--;
+			}else{
+				curr++;
+			}
+			if(curr == 0)
+				return i+1;
+		}
+		return -1;
+	};
+	big drift = curr -x;
+	if(time_to_hit == -1){
+		if(x > 0){
+			if(drift > 0){
+				output(0);
+				return;
+			}else if(drift < 0){
+				big atleast = - (maxleft - x);
+				//I need time to hit atleast
+				big dist = abs(atleast - x);
+				big time_hit_atleast = n*((dist)/(-drift));
+				int _time = 0;
+				int target = -(dist%drift);
+				int cr = 0;
+				for(int i =0 ; i < n; i++){
+					if(s[i] == 'L'){
+						cr--;
+					}else{
+						cr++;
+					}
+					if(cr == target){
+						_time = i+1;
+						break;
+					}
+ 
+				}
+				time_hit_atleast += _time;
+				time_to_hit = time_hit_atleast + sim(atleast);
+				debug(atleast,dist,time_hit_atleast,time_to_hit);
+ 
+			}else{
+				output(0);
+				return;
+			}
+		}else{
+			if(drift > 0){
+				big atleast = -(maxright - x);
+				big dist = abs(atleast - x);
+				big time_hit_atleast = n*((dist)/(drift));
+				int _time = 0;
+				int target = dist%drift;
+				int cr = 0;
+				for(int i =0 ; i < n; i++){
+					if(s[i] == 'L'){
+						cr--;
+					}else{
+						cr++;
+					}
+					if(cr == target){
+						_time = i+1;
+						break;
+					}
+ 
+				}
+				time_hit_atleast += _time;
+				time_to_hit = time_hit_atleast + sim(atleast);
+				debug(atleast,dist,time_hit_atleast,time_to_hit);
+ 
+			}else if(drift < 0){
+				output(0);
+				return;
+			}else{
+				output(0);
+				return;
+			}
+ 
+		}
+ 
+	}
+	assert(time_to_hit != -1);
+	big ans = 0;
+	if(k < time_to_hit){
+		output(0);
+		return;
+	}
+	if(k == time_to_hit){
+		output(1);
+		return;
+	}
+ 
+	k -= time_to_hit;
+	ans++;
+ 
+	curr= 0 ;
+	for(int i =0 ; i < n; i++){
+		if(s[i] == 'L'){
+			curr--;
+		}else{
+			curr++;
+		}
+		if(curr == 0){
+			//the period is i+1;
+			ans += k/(i+1);
+			output(ans);
+			return;
+		}
+	}
+	output(ans);
+ 
+ 
+}

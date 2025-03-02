@@ -37,8 +37,6 @@ void Solve()
     if(vis[i]==0){
     	path.push_back(i);
     if(dfscycle(0,i,adj,vis,path)){
-    	// for(auto it:path)cout<<it<<" ";
-    	// 	cout<<endl;
     	ll res=0;
    for(ll i=path.size()-1;i>=0;i--){
    	res++;
